@@ -43,7 +43,7 @@ userControllers.createNewUser = async (req, res, next) => {
   if (password === confirmPassword) {
     res.locals.createuser = 'success';
     const user_selector = 'INSERT INTO users (_id, username, password, email, first_name, last_name) VALUES ($1, $2, $3, $4, $5, $6)';
-    const user_value = [1927, username, password, email, firstName, lastName];
+    const user_value = [3927, username, password, email, firstName, lastName];
 
     db.query(user_selector, user_value, (err, data) => {
       if (err) return next(err);
