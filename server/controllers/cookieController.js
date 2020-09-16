@@ -1,5 +1,7 @@
 const db = require('../models/usersModel')
 
+// Currently, cookie controller is not implemented
+
 const cookieController = {};
 
 cookieController.setCookie = (req, res, next) => {

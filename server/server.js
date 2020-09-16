@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const userControllers = require('./controllers/userControllers');
+
+// currently, cookieController is not implemented
 const cookieController = require('./controllers/cookieController');
 
 
