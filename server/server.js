@@ -30,12 +30,11 @@ app.post('/api/login',
 
 //handle signup request
 app.post('/api/signup',
- userControllers.queryNewUser,
  userControllers.createNewUser, 
+ userControllers.queryUser,
  (req, res) => {
   res.status(200).json(res.locals.createuser)
 });
-
 
 // get req to get all posts in the post table
 app.get('/api/posts',
