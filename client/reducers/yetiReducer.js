@@ -37,16 +37,16 @@ const yetiReducer = (state = initialState, action) => {
       };
     // LOGIN REDUCERS
 case actionTypes.UPDATE_LOGIN:
-  const test ={...state, username:'casey'}
-  console.log(test)
+  username = action.payload;
   return {
     ...state,
-    username: 'casey',
+    username,
   }
 case actionTypes.UPDATE_PASSWORD:
+  password = action.payload;
   return {
     ...state,
-    password: 'password',
+    password,
   }
     case actionTypes.LOGIN_START:
       return {

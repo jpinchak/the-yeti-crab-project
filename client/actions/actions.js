@@ -34,9 +34,9 @@ export const loginStarted = () => ({
   type: actionTypes.LOGIN_START,
 });
 
-export const updateLogin =(users)=>({
+export const updateLogin =(username)=>({
   type:actionTypes.UPDATE_LOGIN,
-  payload: users
+  payload: username
 })
 export const updatePassword =(userpassword) => ({
   type:actionTypes.UPDATE_PASSWORD,
