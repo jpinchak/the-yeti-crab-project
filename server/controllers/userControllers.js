@@ -22,41 +22,48 @@ userControllers.queryUser = async (req, res, next) => {
   //checking if email exists in database. If a row with that email is returned, it will indicate that the email already has an account and return an error that the email is already registered.
   const email_selector = 'SELECT * FROM users WHERE email = $1';
   const email_value = [email];
+  return next();
+  // db.query(email_selector, email_value, (err, data) => {
+  //   if (err) return next(err)
+  //   console.log(data)
+  //   console.log('hello');
+  //   if (data.rows[0] === email) {
+  //     res.locals.createuser = 'email address already exists';
+  //     return next();
+  //   }
+  //   return next(); 
+  // });
+};
 
-  db.query(email_selector, email_value, (err, data) => {
-    console.log(data.rows);
-    if (err) return next(err);
-    if (data.rows[0] === email) {
-      return next({
-        error: 'Email already registered, please login or use another email.',
-      });
-    }
-    return next(); 
-  });
-}
-
-userControllers.createNewUser = async (req, res, next) => {
-
+userControllers.createNewUser = (req, res, next) => {
   const { username, password, confirmPassword, email, firstName, lastName } = req.body;
+  console.log(username, password);
 
   //check if passwords match
-  if (password === confirmPassword) {
+  // if (password === confirmPassword) {
     res.locals.createuser = 'success';
-    const user_selector = 'INSERT INTO users (_id, username, password, email, first_name, last_name) VALUES ($1, $2, $3, $4, $5, $6)';
-    const user_value = [3927, username, password, email, firstName, lastName];
+    const user_selector = `INSERT INTO users (username, password, email, first_name, last_name) VALUES ('eeee','l', 'd', 'l', 's');`;
+    const user_value = [username, password, email, firstName, lastName];
 
-    db.query(user_selector, user_value, (err, data) => {
-      if (err) return next(err);
+  db.query(user_selector)
+    .then(res => {
+      console.log(res)
+      next()
+    })
+    .catch(err => next(err))
+      // console.log(user_selector);
+      // console.log(data)
+      // if (err) return next(err);
         //send confirmation back to client
-      res.locals.createuser = `user created successfully`;
-      return next();
-    });  
-  } else {
-    //if passwords don't match
-    res.locals.createuser = 'Passwords not matching.';
-    return next();
-  }
-};
+      // res.locals.createuser = `user created successfully`;
+      // return next();
+    };  
+  // } else {
+  //   //if passwords don't match
+  //   res.locals.createuser = 'Passwords not matching.';
+  //   return next();
+  // }
+// };
 
 userControllers.verifyUser = (req, res, next) => {
   // get username and password from req.body
