@@ -3,79 +3,71 @@ const db = require('../models/usersModel');
 const userControllers = {};
 
 //query user will query the db to check if that email already exists or not
-userControllers.queryNewUser = async (req, res, next) => {
+userControllers.queryUser = async (req, res, next) => {
   //destructure req.body and assign variables to res.locals
-  const {
-    email,
-    firstName,
-    lastName,
-    username,
-    password,
-    confirmPassword,
-  } = req.body;
-  res.locals.createuser = {
-    email,
-    firstName,
-    lastName,
-    username,
-    password,
-    confirmPassword,
-  };
-  let value = [email];
 
-  const string = 'SELECT * FROM users WHERE email = $1';
-  db.query(string, value, (err, data) => {
-    if (err) return next(err);
-    if (data.rows[0]) {
-      if (data.rows[0].email === email) {
-        res.locals.createuser.email = data.rows[0].email;
-        return next({
-          error: 'Email already registered, please login or use another email.',
-        });
-      }
-    } else {
-      res.locals.createuser.email = email;
-      return next();
-    }
-  });
+  // const newUser = {
+  //   firstName: 'j',
+  //   lastName: 'j',
+  //   email: 'gfd',
+  //   username: 'jhg',
+  //   password: 'gfd',
+  //   confirmPassword: 'gdddfd'
+  // }
+
+  // const { username, password, confirmPassword, email, firstName, lastName  } = newUser;
+
+  const { email } = req.body;
+
+  //checking if email exists in database. If a row with that email is returned, it will indicate that the email already has an account and return an error that the email is already registered.
+  const email_selector = 'SELECT * FROM users WHERE email = $1';
+  const email_value = [email];
+  return next();
+  // db.query(email_selector, email_value, (err, data) => {
+  //   if (err) return next(err)
+  //   console.log(data)
+  //   console.log('hello');
+  //   if (data.rows[0] === email) {
+  //     res.locals.createuser = 'email address already exists';
+  //     return next();
+  //   }
+  //   return next(); 
+  // });
 };
 
-userControllers.createNewUser = async (req, res, next) => {
-  //check if passwords don't match
-  if (
-    res.locals.createuser.password === res.locals.createuser.confirmPassword
-  ) {
-    //do I need to include users_id for userinfo table
-    //remove ``
-    //add user to User and Userinfo tables
-    //users works userinfo does not
-    await db
-      .query(
-        `INSERT INTO Users (_id, username, password, email, first_name, last_name) 
-    VALUES (${Math.floor(Math.random() * 1000)}, '${
-          res.locals.createuser.username
-        }', '${res.locals.createuser.password}', '${
-          res.locals.createuser.email
-        }', '${res.locals.createuser.firstName}', '${
-          res.locals.createuser.lastName
-        }')`,
-      )
-      .then(() => {
+userControllers.createNewUser = (req, res, next) => {
+  const { username, password, confirmPassword, email, firstName, lastName } = req.body;
+  console.log(username, password);
+
+  //check if passwords match
+  // if (password === confirmPassword) {
+    res.locals.createuser = 'success';
+    const user_selector = `INSERT INTO users (username, password, email, first_name, last_name) VALUES ('eeee','l', 'd', 'l', 's');`;
+    const user_value = [username, password, email, firstName, lastName];
+
+  db.query(user_selector)
+    .then(res => {
+      console.log(res)
+      next()
+    })
+    .catch(err => next(err))
+      // console.log(user_selector);
+      // console.log(data)
+      // if (err) return next(err);
         //send confirmation back to client
-        res.locals.createuser = `user created successfully`;
-        return next();
-      });
-  }
-  //if passwords don't match
-  return next({
-    error: 'Passwords not matching.',
-  });
-};
+      // res.locals.createuser = `user created successfully`;
+      // return next();
+    };  
+  // } else {
+  //   //if passwords don't match
+  //   res.locals.createuser = 'Passwords not matching.';
+  //   return next();
+  // }
+// };
 
 userControllers.verifyUser = (req, res, next) => {
   // get username and password from req.body
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password }  = req.body;
   // store username as an array in values
   const values = [username];
   // query from user where id is equal to username

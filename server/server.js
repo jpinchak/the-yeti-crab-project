@@ -3,8 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const userControllers = require('./controllers/userControllers');
+
+// currently, cookieController is not implemented
 const cookieController = require('./controllers/cookieController');
 
+//configuring dotenv below to hide our sensitive information
+require('dotenv').config()
 
 const app = express();
 const PORT = 3000;
@@ -28,12 +32,11 @@ app.post('/api/login',
 
 //handle signup request
 app.post('/api/signup',
- userControllers.queryNewUser,
+ userControllers.queryUser,
  userControllers.createNewUser, 
  (req, res) => {
   res.status(200).json(res.locals.createuser)
 });
-
 
 // get req to get all posts in the post table
 app.get('/api/posts',
