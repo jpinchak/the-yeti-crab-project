@@ -1,5 +1,6 @@
 import * as actionTypes from '../constants/actiontypes';
 import axios from 'axios';
+import { browserHistory } from 'react-router';
 
 // Create specific action functions that return object/dispatch
 export const loginPopup = () => ({
@@ -15,7 +16,6 @@ export const signupPopup = () => ({
 export const login = (userInfo) => {
   return (dispatch) => {
     dispatch(loginStarted());
-
     // Post request to server, axios automatically parses response
     axios
       .post('/api/login', {
@@ -23,9 +23,20 @@ export const login = (userInfo) => {
         password: userInfo.password,
       })
       // Expect user id from api call
-      .then((res) => dispatch(loginSuccess(res.data)))
-      .then(()=> dispatch(getPosts()))
-      .catch((err) => dispatch(loginFailed(err.message)));
+      .then((res) => {
+        if(res.data === true) {
+          console.log('valid');
+          dispatch(loginSuccess(userInfo))
+        .then(() => {
+            browserHistory.push('/home');
+            dispatch(getPosts())
+          })
+        } else {
+          console.log('invalid');
+          dispatch(loginFailed(res.data))
+        }
+      })
+      .catch((err) => dispatch(loginFailed(err)));
   };
 };
 
@@ -37,22 +48,23 @@ export const loginStarted = () => ({
 export const updateLogin =(username)=>({
   type:actionTypes.UPDATE_LOGIN,
   payload: username
-})
+});
+
 export const updatePassword =(userpassword) => ({
   type:actionTypes.UPDATE_PASSWORD,
   payload: userpassword
-})
+});
 
 // login success dispatches upon successful completion of get request
-export const loginSuccess = (loginResponse) => ({
+export const loginSuccess = (userInfo) => ({
   type: actionTypes.LOGIN_SUCCESS,
-  payload: loginResponse,
+  payload: userInfo,
 });
 
 // Login failure dispatches if theres an error in the request
 export const loginFailed = (loginErr) => ({
   type: actionTypes.LOGIN_FAILURE,
-  payload: { ...loginErr },
+  payload: loginErr,
 });
 
 // SIGNUP ACTIONS //

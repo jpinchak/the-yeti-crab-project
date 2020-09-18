@@ -69,29 +69,44 @@ userControllers.verifyUser = (req, res, next) => {
   // get username and password from req.body
   const { username, password }  = req.body;
   // store username as an array in values
-  const values = [username];
+  const values = [username, password];
   // query from user where id is equal to username
-  const queryUser = 'SELECT * FROM users WHERE username = $1';
-  // check if username exists by querying the database
-  db.query(queryUser, values, (err, user) => {
-    // if err send to global err handler
-    if (!user.rows[0].username) {
-      return next({ 
-        error: err 
-      }) 
-    } 
-      // if password checks out send back user id
-      if (user.rows[0].password === password) {
-        // console.log(user.rows[0]);
-        //store in res.locals
-        res.locals.login = user.rows[0]._id;
-        // return next back to server.js
-        return next();
-      } else {
-        res.locals.login = 'password is incorrect';
-        return next();
-      }
+  const queryUser = {
+    text: `SELECT username, password FROM users WHERE username=$1 AND password=$2`,
+    values: values
+  };
+  db.query(queryUser)
+  .then(result => {
+    if(result.rows.length > 0) {
+      res.locals.loginSuccess = true;
+      return next();
+    } else {
+      res.locals.loginSuccess = false;
+      return next();
+    }
   })
+  .catch(err => next(err))
+
+  // check if username exists by querying the database
+  // db.query(queryUser, values, (err, user) => {
+  //   // if err send to global err handler
+  //   // if (!user.rows[0].username) {
+  //   //   return next({ 
+  //   //     error: err 
+  //   //   }) 
+  //   // } 
+  //     // if password checks out send back user id
+  //     if (user.rows[0].password === password) {
+  //       // console.log(user.rows[0]);
+  //       //store in res.locals
+  //       res.locals.login = user.rows[0]._id;
+  //       // return next back to server.js
+  //       return next();
+  //     } else {
+  //       res.locals.login = 'password is incorrect';
+  //       return next();
+  //     }
+  // })
 }
 
 userControllers.createPost = (req, res, next) => {

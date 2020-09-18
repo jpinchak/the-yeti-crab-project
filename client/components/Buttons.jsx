@@ -14,7 +14,7 @@ const Buttons = (props) => {
   return (
     <div id='buttonContainer'>
     {/* link will change the path to "/login" */}
-      <Link to="/Login">
+      <Link to="/Loginpage">
       <button type='button' id='logInButton'>
         Log-in
       </button>

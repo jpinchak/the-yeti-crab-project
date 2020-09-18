@@ -27,7 +27,7 @@ app.post('/api/login',
   userControllers.verifyUser,
   // cookieController.setSSIDCookie,
   (req,res) => {
-    res.status(200).json(res.locals.login)
+    res.status(200).json(res.locals.loginSuccess)
 })
 
 //handle signup request

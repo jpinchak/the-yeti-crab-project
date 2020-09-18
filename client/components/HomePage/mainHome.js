@@ -5,6 +5,7 @@ import PostsFeed from './postsFeed'
 
 const mapStateToProps = (state) => ({
   posts: state.yetiReducer.posts,
+  isLoggedIn: state.yetiReducer.isLoggedIn
 })
 
 //Will render entire home page

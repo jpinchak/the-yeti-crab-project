@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import * as actions from './actions/actions';
-import { connect } from 'react-redux';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage/LoginPage.jsx';
 import SignupPage from './components/SignUpPage/SignUpPage';
 import Home from './components/HomePage/mainHome';
+import AuthRoute from './components/AuthRoute.jsx';
 
 // declare a const App which will will be our main component which will render child components.
 class App extends Component {
@@ -24,17 +17,10 @@ class App extends Component {
       <Router>
         <div id='App'>
           <Switch>
-            <Route exact path='/'>
-              <LandingPage />
-            </Route>
-            <Route path='/login'>
-              <LoginPage />
-            </Route>
-            <Route path='/signup'>
-              <SignupPage />
-            </Route>
-            <Route path='/home'/>
-              <Home />
+            <Route exact path='/' component={LandingPage} />
+            <Route path='/loginpage' component={LoginPage} />
+            <Route path='/signup' component={SignupPage} />
+            <AuthRoute path='/home' component={Home} isLoggedIn={true} />
           </Switch>
         </div>
       </Router>

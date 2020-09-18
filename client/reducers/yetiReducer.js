@@ -22,6 +22,8 @@ const initialState = {
 const yetiReducer = (state = initialState, action) => {
   let username;
   let password;
+  let currentUserId;
+  let isLoggedIn;
   switch (action.type) {
     // Functionality to show login popup
     case actionTypes.LOGGING_IN:
@@ -55,22 +57,32 @@ case actionTypes.UPDATE_PASSWORD:
       };
 
     case actionTypes.LOGIN_SUCCESS:
-      console.log(action.payload);
+      username = '';
+      password = '';
+      currentUserId: action.payload.username;
+      isLoggedIn = true;
       return {
         ...state,
+        username,
+        password,
         isLoggingIn: false,
-        isLoggedIn: true,
-        currentUserId: action.payload,
+        isLoggedIn,
+        currentUserId,
         //Something with posts
         loading: false,
         error: null,
       };
     case actionTypes.LOGIN_FAILURE:
-      alert('Incorrect information!')
+      username = '';
+      password = '';
+      isLoggedIn = false;
       return {
         ...state,
+        username,
+        password,
         loading: false,
-        error: action.payload.error,
+        isLoggedIn,
+        //error: action.payload.error,
       };
     // SIGNUP REDUCERS
     case actionTypes.SIGNUP_START:
@@ -96,9 +108,11 @@ case actionTypes.UPDATE_PASSWORD:
       };
     // GET POST REDUCERS
     case actionTypes.GETPOST_START:
+      isLoggedIn = true;
       return {
         ...state,
         loading: true,
+        isLoggedIn,
       };
     case actionTypes.GETPOST_SUCCESS:
       return {
